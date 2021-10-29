@@ -31,3 +31,11 @@
 *.out
 *.app
 .gitattributes
+*.db
+*.sqlite
+*.make
+*.db-wal
+*.db-shm
+*.ipch
+*.opendb
+.vs/Project4/v16/.suo
