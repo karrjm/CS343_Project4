@@ -19,6 +19,9 @@
     <ClCompile Include="src\RobotNPC.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\buildTerrainMesh.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -45,6 +48,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\RobotNPC.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\buildTerrainMesh.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

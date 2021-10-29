@@ -180,6 +180,7 @@
     <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\buildTerrainMesh.cpp" />
     <ClCompile Include="src\CameraMatrices.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
@@ -188,6 +189,7 @@
     <ClCompile Include="src\World.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\buildTerrainMesh.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\CameraMatrices.h" />
     <ClInclude Include="src\ofApp.h" />
