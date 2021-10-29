@@ -39,3 +39,10 @@
 *.ipch
 *.opendb
 .vs/Project4/v16/.suo
+.vs/CS343_Project4/v16/.suo
+CS343_Project4.sln
+CS343_Project4.vcxproj.filters
+CS343_Project4.vcxproj
+CS343_Project4.vcxproj.user
+icon.rc
+icon.rc
