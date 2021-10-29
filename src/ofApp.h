@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include "Camera.h"
 #include "SceneGraphNode.h"
+using namespace glm;
 
 
 class ofApp : public ofBaseApp{
@@ -28,7 +29,6 @@ class ofApp : public ofBaseApp{
 		void gotMessage(ofMessage msg);
 		
 private:
-	Camera camera;
 	ofShader shader;
 	ofMesh cubeMesh;
 	bool needsReload = true;
@@ -37,6 +37,9 @@ private:
 	float cameraHead{ 0 };
 	float cameraPitch{ 0 };
 	glm::vec3 velocity{};
+
+	Camera camera { vec3(0,0,2) };
+
 
 	SceneGraphNode sceneGraphRoot{};
 	std::shared_ptr<SceneGraphNode> cubeNode{};

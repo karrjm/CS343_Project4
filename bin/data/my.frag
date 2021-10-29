@@ -20,4 +20,5 @@ void main()
 	vec3 linearColor = meshColor * irradiance;
 
     outColor = vec4(pow(linearColor, vec3(1.0 / 2.2)), 1.0);
+    //outColor = vec4(normal * 0.5f + vec3(0.5), 1.0f);
 }

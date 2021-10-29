@@ -45,37 +45,38 @@ void ofApp::reloadShaders() {
 //--------------------------------------------------------------
 void ofApp::update()
 {
-	using namespace glm;
 	camera.position += mat3(rotate(cameraHead, vec3(0, 1, 0))) * velocity * ofGetLastFrameTime();
 	camera.rotation = rotate(cameraHead, vec3(0, 1, 0)) * rotate(cameraPitch, vec3(1, 0, 0));
 }
 
 void ofApp::updateCameraRotation(float dx, float dy)
 {
-	cameraHead += dx;
-	cameraPitch += dy;
+	cameraHead -= dx;
+	cameraPitch -= dy;
 
-	using namespace glm;
 	cameraPitch = clamp(cameraPitch, -static_cast<float>(PI) / 2, static_cast<float>(PI) / 2);
 }
 
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-	using namespace glm;
 
-	float width{ static_cast<float>(ofGetViewportWidth()) };
-	float height{ static_cast<float>(ofGetViewportHeight()) };
-	float aspect = width / height;
+    float width{ static_cast<float>(ofGetViewportWidth()) };
+    float height{ static_cast<float>(ofGetViewportHeight()) };
+    float aspect = width / height;
 
-	CameraMatrices camMatrices{ camera, aspect, 0.01f, 10.0f, };
+    CameraMatrices camMatrices{ camera, aspect, 0.01f, 10.0f, };
 
-	mat4 model { };
+    
+    sceneGraphRoot.drawSceneGraph(camMatrices);
 
-	shader.begin();
-	shader.setUniformMatrix4f("mvp", camMatrices.getProj() * camMatrices.getView() * model);
+    /*mat4 model { };
+
+    shader.begin();
+    shader.setUniformMatrix4f("mvp", camMatrices.getProj() * camMatrices.getView() * model);
     cubeMesh.draw();
-	shader.end();
+    shader.end();
+*/
 }
 
 //--------------------------------------------------------------
