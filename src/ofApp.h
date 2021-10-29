@@ -2,6 +2,8 @@
 
 #include "ofMain.h"
 #include "Camera.h"
+#include "SceneGraphNode.h"
+
 
 class ofApp : public ofBaseApp{
 
@@ -9,6 +11,9 @@ class ofApp : public ofBaseApp{
 		void setup();
 		void update();
 		void draw();
+
+		void reloadShaders();
+
 
 		void keyPressed(int key);
 		void keyReleased(int key);
@@ -25,10 +30,16 @@ class ofApp : public ofBaseApp{
 private:
 	Camera camera;
 	ofShader shader;
+	ofMesh cubeMesh;
+	bool needsReload = true;
 	int prevX{ 0 }, prevY{ 0 };
 	float mouseSensitivity{ 0.01f };
 	float cameraHead{ 0 };
 	float cameraPitch{ 0 };
 	glm::vec3 velocity{};
+
+	SceneGraphNode sceneGraphRoot{};
+	std::shared_ptr<SceneGraphNode> cubeNode{};
+
 	void updateCameraRotation(float dx, float dy);
 };

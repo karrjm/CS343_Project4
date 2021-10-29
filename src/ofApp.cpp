@@ -1,13 +1,45 @@
 #include "ofApp.h"
+#include "GLFW/glfw3.h"
 #include "CameraMatrices.h"
+#include "SimpleDrawNode.h"
+using namespace glm;
 
 //--------------------------------------------------------------
 void ofApp::setup()
 {
-	ofDisableArbTex();
-	//ofEnableDepthTest();
 
+    ofDisableArbTex();
+
+    ofEnableDepthTest();
+
+    //glEnable(GL_CULL_FACE);
+
+    reloadShaders();
+
+    // Loading cubeMesh
+    cubeMesh.load("models/cube.ply");
+    cubeMesh.flatNormals();
+
+    for (size_t i{ 0 }; i < cubeMesh.getNumNormals(); i++)
+    {
+        cubeMesh.setNormal(i, -cubeMesh.getNormal(i));
+    }
+
+    // Initialize scene graph
+    sceneGraphRoot.childNodes.emplace_back(new SimpleDrawNode{ cubeMesh, shader });
+
+    // cube node is the most recent node added to the scene pgraph at this point
+    cubeNode = sceneGraphRoot.childNodes.back();
+
+
+
+
+    ofSetBackgroundColor(53, 81, 98);
+}
+
+void ofApp::reloadShaders() {
     shader.load("my.vert", "my.frag");
+    needsReload = false;
 }
 
 //--------------------------------------------------------------
@@ -42,6 +74,7 @@ void ofApp::draw()
 
 	shader.begin();
 	shader.setUniformMatrix4f("mvp", camMatrices.getProj() * camMatrices.getView() * model);
+    cubeMesh.draw();
 	shader.end();
 }
 
