@@ -45,4 +45,6 @@ private:
 	std::shared_ptr<SceneGraphNode> cubeNode{};
 
 	void updateCameraRotation(float dx, float dy);
+
+	void updateModelRotation(float dx, float dy);
 };

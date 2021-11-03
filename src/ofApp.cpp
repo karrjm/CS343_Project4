@@ -57,6 +57,13 @@ void ofApp::updateCameraRotation(float dx, float dy)
 	cameraPitch = clamp(cameraPitch, -static_cast<float>(PI) / 2, static_cast<float>(PI) / 2);
 }
 
+void ofApp::updateModelRotation(float dx, float dy)
+{
+    mat3 currentRotation = { mat3(cubeNode->localTransform) };
+    vec3 currentTranslation = { cubeNode->localTransform[3] };
+    cubeNode->localTransform = translate(currentTranslation) * rotate(dx, vec3(0, 1, 0)) * mat4(currentRotation);
+}
+
 //--------------------------------------------------------------
 void ofApp::draw()
 {
@@ -130,8 +137,11 @@ void ofApp::mouseMoved(int x, int y )
 {
     if (prevX != 0 && prevY != 0)
     {
+        int dx = x - prevX;
+        int dy = y - prevY;
+
         // Update camera rotation based on mouse movement
-        updateCameraRotation(mouseSensitivity * (x - prevX), mouseSensitivity * (y - prevY));
+        updateCameraRotation(mouseSensitivity * dx, mouseSensitivity * dy);
     }
 
     // Remember where the mouse was this frame.
@@ -140,8 +150,20 @@ void ofApp::mouseMoved(int x, int y )
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseDragged(int x, int y, int button){
+void ofApp::mouseDragged(int x, int y, int button)
+{
+    if (prevX != 0 && prevY != 0)
+    {
+        int dx = x - prevX;
+        int dy = y - prevY;
 
+        // Update camera rotation based on mouse movement
+        updateModelRotation(mouseSensitivity * dx, mouseSensitivity * dy);
+    }
+
+    // Remember where the mouse was this frame.
+    prevX = x;
+    prevY = y;
 }
 
 //--------------------------------------------------------------
