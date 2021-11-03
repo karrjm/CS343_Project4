@@ -25,12 +25,46 @@ void ofApp::setup()
         cubeMesh.setNormal(i, -cubeMesh.getNormal(i));
     }
 
-    // Initialize scene graph
-    sceneGraphRoot.childNodes.emplace_back(new SimpleDrawNode{ cubeMesh, shader });
 
+    // initialize scene graph
+
+    // add non-drawing node to represent the rotating cube
+    sceneGraphRoot.childNodes.emplace_back(new SceneGraphNode{});
+
+    // rotating cube node starts here --------------------------------------------------------------
     // cube node is the most recent node added to the scene pgraph at this point
     cubeNode = sceneGraphRoot.childNodes.back();
 
+    cubeNode->childNodes.emplace_back(new SimpleDrawNode{ cubeMesh, shader });
+
+    auto cubeMeshNode = cubeNode->childNodes.back();
+
+    // add non-drawing node as child of rotating node
+    cubeNode->childNodes.emplace_back(new SceneGraphNode{});
+    cubeNode->childNodes.back()
+        ->localTransform = translate(vec3(0, 3, 0));
+    //cubeNode
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+    // add a non-drawing node to the scene graph
+    sceneGraphRoot.childNodes.emplace_back(new SceneGraphNode{});
+
+    sceneGraphRoot.childNodes.back() // node added
+        ->childNodes.push_back(cubeNode); // add a pointer to the cube node as a child
+
+    sceneGraphRoot.childNodes.back()
+        ->localTransform = translate(vec3(3, 0, 0));
+
+    //---------------------------------------------------------------------------
+
+    sceneGraphRoot.childNodes.emplace_back(new SceneGraphNode{});
+
+    // create a new cube node distinct from one that rotates
+    sceneGraphRoot.childNodes.back()
+        ->childNodes.push_back(cubeMeshNode);
+
+    sceneGraphRoot.childNodes.back()
+        ->localTransform = translate(vec3(-3, 0, 0));
 
 
 
