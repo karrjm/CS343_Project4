@@ -43,21 +43,16 @@ void ofApp::setup()
 
 
     // add non-drawing node to represent rotating radar
-    sceneGraphRoot.childNodes.emplace_back(new SceneGraphNode{});
+    sceneGraphRoot.childNodes.emplace_back(new SimpleDrawNode{ radarMesh, shader });
     radarNode = sceneGraphRoot.childNodes.back();
-    radarNode->childNodes.emplace_back(new SimpleDrawNode{ radarMesh, shader });
-    /*radarNode->childNodes.back()
-        ->localTransform = translate(vec3(0, 0, 0));*/
-    auto radarMeshNode = radarNode->childNodes.back();
+    radarNode->localTransform = translate(vec3(5, 0, 0));
+    /*auto radarMeshNode = radarNode->childNodes.back();*/
 
     // add non-drawing node to represent rotating gun
-    sceneGraphRoot.childNodes.emplace_back(new SceneGraphNode{});
+    sceneGraphRoot.childNodes.emplace_back(new SimpleDrawNode{ gunMesh, shader });
     gunNode = sceneGraphRoot.childNodes.back();
-    gunNode->childNodes.emplace_back(new SimpleDrawNode{ gunMesh, shader });
-    /*gunNode->childNodes.back()
-        ->localTransform = translate(vec3(0, 0, 0));*/
-
-    auto gunMeshNode = gunNode->childNodes.back();
+    gunNode->localTransform = translate(vec3(-5, 0, 0));
+    /*auto gunMeshNode = gunNode->childNodes.back();*/
 
 
 
