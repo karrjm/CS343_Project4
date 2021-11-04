@@ -32,22 +32,19 @@ private:
 	ofShader shader;
 	ofMesh robotMesh;
 	ofMesh radarMesh;
-	ofMesh cannonMesh;
-
+	ofMesh gunMesh;
 	bool needsReload = true;
 	int prevX{ 0 }, prevY{ 0 };
 	float mouseSensitivity{ 0.01f };
 	float cameraHead{ 0 };
 	float cameraPitch{ 0 };
 	glm::vec3 velocity{};
-
 	Camera camera { vec3(0,0,2) };
-
-
 	SceneGraphNode sceneGraphRoot{};
-	std::shared_ptr<SceneGraphNode> cubeNode{};
-
+	std::shared_ptr<SceneGraphNode> robotNode{};
+	std::shared_ptr<SceneGraphNode> radarNode{};
+	std::shared_ptr<SceneGraphNode> gunNode{};
 	void updateCameraRotation(float dx, float dy);
-
 	void updateModelRotation(float dx, float dy);
+	void updateJointRotation(float dx, float dy);
 };

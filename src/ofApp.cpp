@@ -7,22 +7,18 @@ using namespace glm;
 //--------------------------------------------------------------
 void ofApp::setup()
 {
-
     ofDisableArbTex();
-
     ofEnableDepthTest();
-
     //glEnable(GL_CULL_FACE);
 
     reloadShaders();
 
-    // Loading robotMesh
     robotMesh.load("models/robotBodyV2.ply");
     robotMesh.flatNormals();
     radarMesh.load("models/robotRadarV2.ply");
     radarMesh.flatNormals();
-    cannonMesh.load("models/robotCannonV2.ply");
-    cannonMesh.flatNormals();
+    gunMesh.load("models/robotCannonV2.ply");
+    gunMesh.flatNormals();
 
     for (size_t i{ 0 }; i < robotMesh.getNumNormals(); i++)
     {
@@ -34,28 +30,42 @@ void ofApp::setup()
         radarMesh.setNormal(i, -radarMesh.getNormal(i));
     }
 
-    for (size_t i{ 0 }; i < cannonMesh.getNumNormals(); i++)
+    for (size_t i{ 0 }; i < gunMesh.getNumNormals(); i++)
     {
-        cannonMesh.setNormal(i, -cannonMesh.getNormal(i));
+        gunMesh.setNormal(i, -gunMesh.getNormal(i));
     }
 
-    // Initialize scene graph
-    sceneGraphRoot.childNodes.emplace_back(new SimpleDrawNode{ robotMesh, shader });
-
-    // cube node is the most recent node added to the scene pgraph at this point
-    cubeNode = sceneGraphRoot.childNodes.back();
-
-    sceneGraphRoot.childNodes.emplace_back(new SimpleDrawNode{ radarMesh, shader });
-
-    sceneGraphRoot.childNodes.back() // node just added
-        ->localTransform = translate(vec3(1, 1, 0));
+    // add non-drawing nod to represent static robot body
+    sceneGraphRoot.childNodes.emplace_back(new SceneGraphNode{});
+    robotNode = sceneGraphRoot.childNodes.back();
+    robotNode->childNodes.emplace_back(new SimpleDrawNode{ robotMesh, shader });
+    auto robotMeshNode = robotNode->childNodes.back();
 
 
-    // Create a new mesh distinct from the one that rotates
-    sceneGraphRoot.childNodes.emplace_back(new SimpleDrawNode{ cannonMesh, shader });
+    // add non-drawing node to represent rotating radar
+    sceneGraphRoot.childNodes.emplace_back(new SceneGraphNode{});
+    radarNode = sceneGraphRoot.childNodes.back();
+    radarNode->childNodes.emplace_back(new SimpleDrawNode{ radarMesh, shader });
+    auto radarMeshNode = radarNode->childNodes.back();
 
-    sceneGraphRoot.childNodes.back() // node just added
-        ->localTransform = translate(vec3(-1, -1, 0));
+    // add non-drawing node to represent rotating gun
+    sceneGraphRoot.childNodes.emplace_back(new SceneGraphNode{});
+    gunNode = sceneGraphRoot.childNodes.back();
+    gunNode->childNodes.emplace_back(new SimpleDrawNode{ gunMesh, shader });
+    auto gunMeshNode = gunNode->childNodes.back();
+
+
+
+
+    /*sceneGraphRoot.childNodes.emplace_back(new SimpleDrawNode{ radarMesh, shader });
+    turretsNode = sceneGraphRoot.childNodes.back();
+    sceneGraphRoot.childNodes.emplace_back(new SimpleDrawNode{ gunMesh, shader });
+    turretsNode = sceneGraphRoot.childNodes.back();*/
+
+
+    //// add a nondrawing node to scene graph
+    //sceneGraphRoot.childNodes.emplace_back(new SceneGraphNode{});
+
 
 
 
@@ -84,9 +94,17 @@ void ofApp::updateCameraRotation(float dx, float dy)
 
 void ofApp::updateModelRotation(float dx, float dy)
 {
-    mat3 currentRotation = { mat3(cubeNode->localTransform) };
-    vec3 currentTranslation = { cubeNode->localTransform[3] };
-    cubeNode->localTransform = translate(currentTranslation) * rotate(dx, vec3(0, 1, 0)) * mat4(currentRotation);
+    mat3 currentRadarRotation = { mat3(radarNode->localTransform) };
+    vec3 currentRadarTranslation = { radarNode->localTransform[3] };
+    radarNode->localTransform = translate(currentRadarTranslation) * rotate(dx, vec3(0, 1, 0)) * mat4(currentRadarRotation);
+
+    mat3 currentGunRotation = { mat3(gunNode->localTransform) };
+    vec3 currentGunTranslation = { gunNode->localTransform[3] };
+    gunNode->localTransform = translate(currentGunTranslation) * rotate(dx, vec3(0, 1, 0)) * mat4(currentGunRotation);
+}
+
+void ofApp::updateJointRotation(float dx, float dy)
+{
 }
 
 //--------------------------------------------------------------
@@ -99,16 +117,7 @@ void ofApp::draw()
 
     CameraMatrices camMatrices{ camera, aspect, 0.01f, 10.0f, };
 
-    
     sceneGraphRoot.drawSceneGraph(camMatrices);
-
-    /*mat4 model { };
-
-    shader.begin();
-    shader.setUniformMatrix4f("mvp", camMatrices.getProj() * camMatrices.getView() * model);
-    cubeMesh.draw();
-    shader.end();
-*/
 }
 
 //--------------------------------------------------------------
@@ -182,8 +191,16 @@ void ofApp::mouseDragged(int x, int y, int button)
         int dx = x - prevX;
         int dy = y - prevY;
 
-        // Update camera rotation based on mouse movement
-        updateModelRotation(mouseSensitivity * dx, mouseSensitivity * dy);
+
+        if (button == 0) 
+        {
+            // Update camera rotation based on mouse movement
+            updateModelRotation(mouseSensitivity * dx, mouseSensitivity * dy);
+        }
+        else if (button == 1) 
+        {
+            updateJointRotation(mouseSensitivity * dx, mouseSensitivity * dy);
+        }
     }
 
     // Remember where the mouse was this frame.
