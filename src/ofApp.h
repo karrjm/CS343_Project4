@@ -30,7 +30,10 @@ class ofApp : public ofBaseApp{
 		
 private:
 	ofShader shader;
-	ofMesh cubeMesh;
+	ofMesh robotMesh;
+	ofMesh radarMesh;
+	ofMesh cannonMesh;
+
 	bool needsReload = true;
 	int prevX{ 0 }, prevY{ 0 };
 	float mouseSensitivity{ 0.01f };

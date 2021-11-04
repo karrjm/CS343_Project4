@@ -83,3 +83,15 @@ obj/x64/Debug/CS343_Project4.tlog/rc.write.1.tlog
 obj/x64/Debug/CS343_Project4_debug.exe.recipe
 obj/x64/Debug/CS343_Project4_debug.ilk
 obj/x64/Debug/vc142.pdb
+bin/Project4_debug.pdb
+bin/Project4_debug.pdb
+obj/x64/Debug/Project4.log
+obj/x64/Debug/Project4.tlog/CL.read.1.tlog
+obj/x64/Debug/Project4.tlog/CL.write.1.tlog
+obj/x64/Debug/Project4.tlog/link.read.1.tlog
+obj/x64/Debug/Project4.tlog/Project4.write.1u.tlog
+obj/x64/Debug/Project4_debug.ilk
+obj/x64/Debug/vc142.pdb
+bin/Project4_debug.pdb
+obj/x64/Debug/Project4.log
+*.log

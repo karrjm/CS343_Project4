@@ -16,55 +16,46 @@ void ofApp::setup()
 
     reloadShaders();
 
-    // Loading cubeMesh
-    cubeMesh.load("models/cube.ply");
-    cubeMesh.flatNormals();
+    // Loading robotMesh
+    robotMesh.load("models/robotBodyV2.ply");
+    robotMesh.flatNormals();
+    radarMesh.load("models/robotRadarV2.ply");
+    radarMesh.flatNormals();
+    cannonMesh.load("models/robotCannonV2.ply");
+    cannonMesh.flatNormals();
 
-    for (size_t i{ 0 }; i < cubeMesh.getNumNormals(); i++)
+    for (size_t i{ 0 }; i < robotMesh.getNumNormals(); i++)
     {
-        cubeMesh.setNormal(i, -cubeMesh.getNormal(i));
+        robotMesh.setNormal(i, -robotMesh.getNormal(i));
     }
 
+    for (size_t i{ 0 }; i < radarMesh.getNumNormals(); i++)
+    {
+        radarMesh.setNormal(i, -radarMesh.getNormal(i));
+    }
 
-    // initialize scene graph
+    for (size_t i{ 0 }; i < cannonMesh.getNumNormals(); i++)
+    {
+        cannonMesh.setNormal(i, -cannonMesh.getNormal(i));
+    }
 
-    // add non-drawing node to represent the rotating cube
-    sceneGraphRoot.childNodes.emplace_back(new SceneGraphNode{});
+    // Initialize scene graph
+    sceneGraphRoot.childNodes.emplace_back(new SimpleDrawNode{ robotMesh, shader });
 
-    // rotating cube node starts here --------------------------------------------------------------
     // cube node is the most recent node added to the scene pgraph at this point
     cubeNode = sceneGraphRoot.childNodes.back();
 
-    cubeNode->childNodes.emplace_back(new SimpleDrawNode{ cubeMesh, shader });
+    sceneGraphRoot.childNodes.emplace_back(new SimpleDrawNode{ radarMesh, shader });
 
-    auto cubeMeshNode = cubeNode->childNodes.back();
+    sceneGraphRoot.childNodes.back() // node just added
+        ->localTransform = translate(vec3(1, 1, 0));
 
-    // add non-drawing node as child of rotating node
-    cubeNode->childNodes.emplace_back(new SceneGraphNode{});
-    cubeNode->childNodes.back()
-        ->localTransform = translate(vec3(0, 3, 0));
-    //cubeNode
-    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-    // add a non-drawing node to the scene graph
-    sceneGraphRoot.childNodes.emplace_back(new SceneGraphNode{});
+    // Create a new mesh distinct from the one that rotates
+    sceneGraphRoot.childNodes.emplace_back(new SimpleDrawNode{ cannonMesh, shader });
 
-    sceneGraphRoot.childNodes.back() // node added
-        ->childNodes.push_back(cubeNode); // add a pointer to the cube node as a child
-
-    sceneGraphRoot.childNodes.back()
-        ->localTransform = translate(vec3(3, 0, 0));
-
-    //---------------------------------------------------------------------------
-
-    sceneGraphRoot.childNodes.emplace_back(new SceneGraphNode{});
-
-    // create a new cube node distinct from one that rotates
-    sceneGraphRoot.childNodes.back()
-        ->childNodes.push_back(cubeMeshNode);
-
-    sceneGraphRoot.childNodes.back()
-        ->localTransform = translate(vec3(-3, 0, 0));
+    sceneGraphRoot.childNodes.back() // node just added
+        ->localTransform = translate(vec3(-1, -1, 0));
 
 
 
