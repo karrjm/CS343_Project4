@@ -13,11 +13,11 @@ void ofApp::setup()
 
     reloadShaders();
 
-    robotMesh.load("models/robotBodyV2.ply");
+    robotMesh.load("models/robotBody.ply");
     robotMesh.flatNormals();
-    radarMesh.load("models/robotRadarV2.ply");
+    radarMesh.load("models/robotRadar.ply");
     radarMesh.flatNormals();
-    gunMesh.load("models/robotCannonV2.ply");
+    gunMesh.load("models/robotCannon.ply");
     gunMesh.flatNormals();
 
     for (size_t i{ 0 }; i < robotMesh.getNumNormals(); i++)
@@ -46,12 +46,17 @@ void ofApp::setup()
     sceneGraphRoot.childNodes.emplace_back(new SceneGraphNode{});
     radarNode = sceneGraphRoot.childNodes.back();
     radarNode->childNodes.emplace_back(new SimpleDrawNode{ radarMesh, shader });
+    /*radarNode->childNodes.back()
+        ->localTransform = translate(vec3(0, 0, 0));*/
     auto radarMeshNode = radarNode->childNodes.back();
 
     // add non-drawing node to represent rotating gun
     sceneGraphRoot.childNodes.emplace_back(new SceneGraphNode{});
     gunNode = sceneGraphRoot.childNodes.back();
     gunNode->childNodes.emplace_back(new SimpleDrawNode{ gunMesh, shader });
+    /*gunNode->childNodes.back()
+        ->localTransform = translate(vec3(0, 0, 0));*/
+
     auto gunMeshNode = gunNode->childNodes.back();
 
 
