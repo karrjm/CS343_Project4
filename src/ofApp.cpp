@@ -54,6 +54,14 @@ void ofApp::setup()
     gunNode->localTransform = translate(vec3(-5, 0, 0));
     /*auto gunMeshNode = gunNode->childNodes.back();*/
 
+    // add a joint node as child of gunNode
+    robotNode->childNodes.emplace_back(new SceneGraphNode{});
+    jointNode = robotNode->childNodes.back();
+    jointNode->localTransform = 
+        translate(vec3(0, 0, 0)) /*rotation here*/;
+    jointNode->childNodes.emplace_back(new SceneGraphNode{});
+    jointNode->childNodes.back()->localTransform = translate(vec3(0, 0, 0));
+    jointNode->childNodes.back()->childNodes.push_back(robotMeshNode);
 
 
 
@@ -105,6 +113,10 @@ void ofApp::updateModelRotation(float dx, float dy)
 
 void ofApp::updateJointRotation(float dx, float dy)
 {
+    mat3 currentRotation{ mat3(gunNode->localTransform) };
+    vec3 currentTranslation{ gunNode->localTransform[3] };
+    jointNode->localTransform = translate(currentTranslation)
+        * rotate(dy, vec3(1, 0, 0)) * mat4(currentRotation);
 }
 
 //--------------------------------------------------------------
@@ -197,7 +209,7 @@ void ofApp::mouseDragged(int x, int y, int button)
             // Update camera rotation based on mouse movement
             updateModelRotation(mouseSensitivity * dx, mouseSensitivity * dy);
         }
-        else if (button == 1) 
+        else if (button == 2) 
         {
             updateJointRotation(mouseSensitivity * dx, mouseSensitivity * dy);
         }

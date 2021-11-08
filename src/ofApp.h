@@ -44,6 +44,7 @@ private:
 	std::shared_ptr<SceneGraphNode> robotNode{};
 	std::shared_ptr<SceneGraphNode> radarNode{};
 	std::shared_ptr<SceneGraphNode> gunNode{};
+	std::shared_ptr<SceneGraphNode> jointNode{};
 	void updateCameraRotation(float dx, float dy);
 	void updateModelRotation(float dx, float dy);
 	void updateJointRotation(float dx, float dy);
