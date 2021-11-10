@@ -41,41 +41,15 @@ void ofApp::setup()
     robotNode->childNodes.emplace_back(new SimpleDrawNode{ robotMesh, shader });
     auto robotMeshNode = robotNode->childNodes.back();
 
-
     // add non-drawing node to represent rotating radar
     sceneGraphRoot.childNodes.emplace_back(new SimpleDrawNode{ radarMesh, shader });
     radarNode = sceneGraphRoot.childNodes.back();
     radarNode->localTransform = translate(vec3(5, 0, 0));
-    /*auto radarMeshNode = radarNode->childNodes.back();*/
 
     // add non-drawing node to represent rotating gun
     sceneGraphRoot.childNodes.emplace_back(new SimpleDrawNode{ gunMesh, shader });
     gunNode = sceneGraphRoot.childNodes.back();
     gunNode->localTransform = translate(vec3(-5, 0, 0));
-    /*auto gunMeshNode = gunNode->childNodes.back();*/
-
-    // add a joint node as child of gunNode
-    robotNode->childNodes.emplace_back(new SceneGraphNode{});
-    jointNode = robotNode->childNodes.back();
-    jointNode->localTransform = 
-        translate(vec3(0, 0, 0)) /*rotation here*/;
-    jointNode->childNodes.emplace_back(new SceneGraphNode{});
-    jointNode->childNodes.back()->localTransform = translate(vec3(0, 0, 0));
-    jointNode->childNodes.back()->childNodes.push_back(robotMeshNode);
-
-
-
-    /*sceneGraphRoot.childNodes.emplace_back(new SimpleDrawNode{ radarMesh, shader });
-    turretsNode = sceneGraphRoot.childNodes.back();
-    sceneGraphRoot.childNodes.emplace_back(new SimpleDrawNode{ gunMesh, shader });
-    turretsNode = sceneGraphRoot.childNodes.back();*/
-
-
-    //// add a nondrawing node to scene graph
-    //sceneGraphRoot.childNodes.emplace_back(new SceneGraphNode{});
-
-
-
 
     ofSetBackgroundColor(53, 81, 98);
 }
@@ -90,6 +64,11 @@ void ofApp::update()
 {
 	camera.position += mat3(rotate(cameraHead, vec3(0, 1, 0))) * velocity * ofGetLastFrameTime();
 	camera.rotation = rotate(cameraHead, vec3(0, 1, 0)) * rotate(cameraPitch, vec3(1, 0, 0));
+
+    float dt = static_cast<float>(ofGetLastFrameTime());
+    time += dt;
+
+    updateModelRotation(dt);
 }
 
 void ofApp::updateCameraRotation(float dx, float dy)
@@ -100,23 +79,15 @@ void ofApp::updateCameraRotation(float dx, float dy)
 	cameraPitch = clamp(cameraPitch, -static_cast<float>(PI) / 2, static_cast<float>(PI) / 2);
 }
 
-void ofApp::updateModelRotation(float dx, float dy)
+void ofApp::updateModelRotation(float dt)
 {
     mat3 currentRadarRotation = { mat3(radarNode->localTransform) };
     vec3 currentRadarTranslation = { radarNode->localTransform[3] };
-    radarNode->localTransform = translate(currentRadarTranslation) * rotate(dx, vec3(0, 1, 0)) * mat4(currentRadarRotation);
+    radarNode->localTransform = translate(currentRadarTranslation) * rotate(dt, vec3(0, 1, 0)) * mat4(currentRadarRotation);
 
     mat3 currentGunRotation = { mat3(gunNode->localTransform) };
     vec3 currentGunTranslation = { gunNode->localTransform[3] };
-    gunNode->localTransform = translate(currentGunTranslation) * rotate(dx, vec3(0, 1, 0)) * mat4(currentGunRotation);
-}
-
-void ofApp::updateJointRotation(float dx, float dy)
-{
-    mat3 currentRotation{ mat3(gunNode->localTransform) };
-    vec3 currentTranslation{ gunNode->localTransform[3] };
-    jointNode->localTransform = translate(currentTranslation)
-        * rotate(dy, vec3(1, 0, 0)) * mat4(currentRotation);
+    gunNode->localTransform = translate(currentGunTranslation) * rotate(dt, vec3(0, 1, 0)) * mat4(currentGunRotation);
 }
 
 //--------------------------------------------------------------
@@ -203,15 +174,10 @@ void ofApp::mouseDragged(int x, int y, int button)
         int dx = x - prevX;
         int dy = y - prevY;
 
-
         if (button == 0) 
         {
             // Update camera rotation based on mouse movement
-            updateModelRotation(mouseSensitivity * dx, mouseSensitivity * dy);
-        }
-        else if (button == 2) 
-        {
-            updateJointRotation(mouseSensitivity * dx, mouseSensitivity * dy);
+            //updateModelRotation(mouseSensitivity * dx, mouseSensitivity * dy);
         }
     }
 

@@ -12,10 +12,7 @@ class ofApp : public ofBaseApp{
 		void setup();
 		void update();
 		void draw();
-
 		void reloadShaders();
-
-
 		void keyPressed(int key);
 		void keyReleased(int key);
 		void mouseMoved(int x, int y );
@@ -44,8 +41,7 @@ private:
 	std::shared_ptr<SceneGraphNode> robotNode{};
 	std::shared_ptr<SceneGraphNode> radarNode{};
 	std::shared_ptr<SceneGraphNode> gunNode{};
-	std::shared_ptr<SceneGraphNode> jointNode{};
 	void updateCameraRotation(float dx, float dy);
-	void updateModelRotation(float dx, float dy);
-	void updateJointRotation(float dx, float dy);
+	void updateModelRotation(float dt);
+	double time { 0 };
 };
