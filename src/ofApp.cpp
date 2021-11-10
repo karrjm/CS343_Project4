@@ -68,6 +68,7 @@ void ofApp::update()
     float dt = static_cast<float>(ofGetLastFrameTime());
     time += dt;
 
+    // animates the turrets
     updateModelRotation(dt);
 }
 
@@ -81,13 +82,14 @@ void ofApp::updateCameraRotation(float dx, float dy)
 
 void ofApp::updateModelRotation(float dt)
 {
+    float move = dt/2 * (cos(time)/2);
     mat3 currentRadarRotation = { mat3(radarNode->localTransform) };
     vec3 currentRadarTranslation = { radarNode->localTransform[3] };
-    radarNode->localTransform = translate(currentRadarTranslation) * rotate(dt, vec3(0, 1, 0)) * mat4(currentRadarRotation);
+    radarNode->localTransform = translate(currentRadarTranslation) * rotate(move, vec3(0, 1, 0)) * mat4(currentRadarRotation);
 
     mat3 currentGunRotation = { mat3(gunNode->localTransform) };
     vec3 currentGunTranslation = { gunNode->localTransform[3] };
-    gunNode->localTransform = translate(currentGunTranslation) * rotate(dt, vec3(0, 1, 0)) * mat4(currentGunRotation);
+    gunNode->localTransform = translate(currentGunTranslation) * rotate(move, vec3(0, 1, 0)) * mat4(currentGunRotation);
 }
 
 //--------------------------------------------------------------
